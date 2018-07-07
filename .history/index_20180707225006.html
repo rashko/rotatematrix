@@ -1,0 +1,114 @@
+<html>
+<head>
+
+</head>
+<style>
+    #grid {
+        width: 250px;
+    }
+    .box {
+        width:50px;
+        height:50px;
+        float:left;
+        border: solid 1px #ccc;
+        box-sizing: border-box;
+        text-align: center;
+    }
+</style>
+<body>
+<h1>Grid rotate</h1>
+<div id="grid"></div>
+<button id="rotator">Rotate</button>
+<script type="text/javascript">
+
+var grid = document.getElementById("grid");
+var rotator =  document.getElementById("rotator");
+const GRID_SIZE = 5;
+let counter = 0;
+var matrix = [];
+var memory = [];
+var row;
+var $scope = {}; 
+// create boxes
+for(x = 0; x < GRID_SIZE; x++){
+    row = [];
+    for(y = 0; y < GRID_SIZE; y++){
+        counter++;
+        var box = document.createElement("div");
+        var value = document.createElement("span");
+        value.className = "value";
+        value.innerHTML = counter;
+        var cords = document.createElement("span");
+        cords.className = "cords";
+        cords.innerHTML = `<br />(${x},${y})`;
+        box.className = "box";
+        box.appendChild(value);
+        box.appendChild(cords);
+        grid.appendChild(box);
+        row.push({x,y, value: counter, el: value, moved: false});
+        
+    }
+    matrix.push(row);
+}
+
+// add event to rotator
+rotator.addEventListener('click', rotate);
+
+function rotate(){
+    // rotGroup();
+    for(x = 0; x < GRID_SIZE; x++){
+        // y = 0;
+        // rotGroup(x, y);
+        // for(y = 0; y < GRID_SIZE; y++){
+            // get first cell and put in line
+            y = 0;
+            rotGroup(y, x);
+        // }
+    }
+}
+
+
+function rotGroup(x, y){
+    var mem;
+    var top = x;
+    var left = y;
+    var bottom = GRID_SIZE - x - 1;
+    var right = GRID_SIZE - y - 1;
+    /*
+    x, y                    => top left
+    x, GRID_SIZE - x        => top right
+    GRID_SIZE, GRID_SIZE    => bottom right
+    GRID_SIZE, x            => bottom left
+    */
+
+    var topLeft = matrix[top][left];
+    var bottomLeft = matrix[right][top];
+    var bottomRight = matrix[right][bottom];
+    var topRight = matrix[left][bottom];
+
+    if(topLeft.moved) return false;
+    mem = topLeft.value;
+
+    topLeft.value = bottomLeft.value;
+    topLeft.el.innerHTML = bottomLeft.value;
+    topLeft.el.classList.add('change'); 
+    topLeft.moved = true;
+    
+    bottomLeft.value = bottomRight.value;
+    bottomLeft.el.innerHTML = bottomRight.value;
+    bottomLeft.el.classList.add('change');
+    bottomLeft.moved = true;
+    
+    bottomRight.value = topRight.value;
+    bottomRight.el.innerHTML = topRight.value;
+    bottomRight.el.classList.add('change');
+    bottomRight.moved = true;
+
+    topRight.value = mem;
+    topRight.el.innerHTML = mem;
+    topRight.el.classList.add('change');
+    topRight.moved = true;
+}
+</script>
+</body>
+</html>
