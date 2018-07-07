@@ -4,7 +4,7 @@
 </head>
 <style>
     #grid {
-        width: 350px;
+        width: 400px;
     }
     .box {
         width:50px;
@@ -29,10 +29,9 @@
 var grid = document.getElementById("grid");
 var rotator =  document.getElementById("rotator");
 var moveCountElement =  document.getElementById("moveCount");
-const GRID_SIZE = 7;
+const GRID_SIZE = 8;
 let counter = 0;
 var matrix = [];
-var memory = [];
 var row;
 var moveCount = 0;
 // create boxes
@@ -62,7 +61,7 @@ rotator.addEventListener('click', rotate);
 
 function rotate(){
     for(x = 0; x < GRID_SIZE; x++){
-        for(y = 0; y < GRID_SIZE; y++){
+        for(y = x; y < GRID_SIZE - x - 1; y++){
             rotGroup(x, y);
         }
     }
@@ -81,7 +80,7 @@ function rotGroup(x, y){
     var bottomRight = matrix[GRID_SIZE - x - 1][GRID_SIZE - y - 1];
     var topRight = matrix[y][GRID_SIZE - x - 1];
 
-    if(topLeft.moved) return false;
+    // if(topLeft.moved) return false;
     moveCount++;
     moveCountElement.innerHTML = moveCount;
     mem = topLeft.value;
